@@ -22,54 +22,58 @@ class _QuestionCardState extends State<QuestionCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: background_white,
-      elevation: 4.0,
-      margin: EdgeInsets.all(10.0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-        side: BorderSide(color: border_gray, width: 2),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.question,
-              style: GoogleFonts.inter(
-                fontSize: 18.0,
-                fontWeight: FontWeight.w600,
-                color: theme_dark,
+    return Container(
+      constraints: BoxConstraints(
+          maxWidth: MediaQuery.sizeOf(context).width * 0.75, minWidth: 210),
+      child: Card(
+        color: background_white,
+        elevation: 4.0,
+        margin: EdgeInsets.all(10.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          side: BorderSide(color: border_gray, width: 2),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.question,
+                style: GoogleFonts.inter(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                  color: theme_dark,
+                ),
               ),
-            ),
-            SizedBox(height: 10.0),
-            Column(
-              children: widget.options
-                  .asMap()
-                  .entries
-                  .map((entry) => RadioListTile<int>(
-                        title: Text(
-                          entry.value,
-                          style: GoogleFonts.inter(
-                            color: theme_dark,
+              SizedBox(height: 10.0),
+              Column(
+                children: widget.options
+                    .asMap()
+                    .entries
+                    .map((entry) => RadioListTile<int>(
+                          title: Text(
+                            "${widget.options.indexOf(entry.value) + 1} - ${entry.value}",
+                            style: GoogleFonts.inter(
+                              color: theme_dark,
+                            ),
                           ),
-                        ),
-                        value: entry.key,
-                        groupValue: selectedOption,
-                        fillColor: MaterialStateProperty.all(theme_dark),
-                        onChanged: (value) {
-                          setState(() {
-                            selectedOption = value;
-                          });
-                          if (widget.onOptionSelected != null) {
-                            widget.onOptionSelected!(value!);
-                          }
-                        },
-                      ))
-                  .toList(),
-            ),
-          ],
+                          value: entry.key,
+                          groupValue: selectedOption,
+                          fillColor: MaterialStateProperty.all(theme_dark),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedOption = value;
+                            });
+                            if (widget.onOptionSelected != null) {
+                              widget.onOptionSelected!(value!);
+                            }
+                          },
+                        ))
+                    .toList(),
+              ),
+            ],
+          ),
         ),
       ),
     );

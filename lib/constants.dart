@@ -14,9 +14,12 @@ extension ColorExtension on String {
 Color background_gray = "#F6F6F7".toColor();
 Color background_white = "#FFFFFF".toColor();
 Color border_gray = "#E3E3E3".toColor();
+// Color theme_dark = "#667085".toColor();
 Color theme_dark = "#667085".toColor();
 Color text_color = "FFFFFF".toColor();
 
 // styles
 TextStyle question_style = GoogleFonts.inter(fontSize: 16);
 TextStyle option_style = GoogleFonts.inter(fontSize: 14);
+TextStyle title_style =
+    GoogleFonts.inter(fontSize: 45, color: Colors.grey.shade700);

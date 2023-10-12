@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scmia_eprom/Data/dummy_data.dart';
+import 'package:scmia_eprom/Screens/login_page.dart';
 import 'package:scmia_eprom/Screens/patient_questionnaire_screen.dart';
 
 class AppNavigator extends StatefulWidget {
@@ -14,8 +15,7 @@ class _AppNavigatorState extends State<AppNavigator> {
   Widget build(BuildContext context) {
     return Navigator(
       pages: [
-        // MaterialPage(child: LoginScreen()),
-        MaterialPage(child: PatientQuestionnaireScreen(questions: questions)),
+        MaterialPage(child: LoginPage()),
       ],
       onPopPage: (route, result) {
         return route.didPop(result);

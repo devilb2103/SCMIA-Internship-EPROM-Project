@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:scmia_eprom/Cubits/Load%20Questionairre%20Cubit/load_questionnaire_cubit.dart';
+import 'package:scmia_eprom/Cubits/User%20Questionnaire%20Cubit/submit_user_questionnaire_cubit.dart';
 import 'package:scmia_eprom/app_navigator.dart';
 
 void main() {
@@ -15,6 +17,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'SCMIA',
-        home: const AppNavigator());
+        home: MultiBlocProvider(providers: [
+          BlocProvider(
+            create: (context) => LoadQuestionnaireCubit(),
+          ),
+          BlocProvider(
+            create: (context) => SubmitUserQuestionnaireCubit(),
+          ),
+        ], child: AppNavigator()));
   }
 }
