@@ -2,11 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scmia_eprom/Data/dummy_data.dart';
 import 'package:scmia_eprom/Screens/patient_questionnaire_screen.dart';
+import 'package:scmia_eprom/Utils/error_snackbar.dart';
 import 'package:scmia_eprom/Widgets/email_text_input.dart';
 import 'package:scmia_eprom/Widgets/password_text_input.dart';
 import 'package:scmia_eprom/constants.dart';
 
 class LoginPage extends StatelessWidget {
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  void login(BuildContext context, String Username, String Password) {
+    if (Username.trim() == "User1" && Password.trim() == "123456") {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => PatientQuestionnaireScreen(
+                  questions: questions, loginPageContext: context)));
+    } else {
+      showSnackbarMessage(
+          context, false, "Invalid Credentials, please try again");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,11 +48,11 @@ class LoginPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         EmailTextInput(
-                            controller: TextEditingController(),
+                            controller: usernameController,
                             hintText: "Username"),
                         SizedBox(height: 20),
                         PasswordTextInput(
-                            controller: TextEditingController(),
+                            controller: passwordController,
                             hintText: "Password"),
                         SizedBox(height: 20),
                         loginButton(context)
@@ -57,11 +74,7 @@ class LoginPage extends StatelessWidget {
       child: FloatingActionButton.extended(
           backgroundColor: theme_dark,
           onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PatientQuestionnaireScreen(
-                        questions: questions, loginPageContext: context)));
+            login(context, usernameController.text, passwordController.text);
           },
           label: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 21),

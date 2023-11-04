@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
+import 'package:scmia_eprom/Data/api_service.dart';
 
 part 'submit_user_questionnaire_state.dart';
 
@@ -14,7 +16,8 @@ class SubmitUserQuestionnaireCubit extends Cubit<SubmitUserQuestionnaireState> {
       function that submits filled questionnaire
   */
 
-  Future<void> submitQuestionnaire() async {
+  Future<void> submitQuestionnaire(List<dynamic> selectedOptions) async {
+    ApiService api = ApiService();
     if (!_canTriggerActions) return;
     _canTriggerActions = false;
 
@@ -22,12 +25,15 @@ class SubmitUserQuestionnaireCubit extends Cubit<SubmitUserQuestionnaireState> {
 
     try {
       // make the api call
+      Response<dynamic> res = await api.sendPrompt(selectedOptions);
       bool state = true;
-      await Future.delayed(Duration(seconds: 2, milliseconds: 100))
-          .then((value) => {state = true}); //Random().nextBool()});
+      // await Future.delayed(Duration(seconds: 2, milliseconds: 100))
+      //     .then((value) => {state = true}); //Random().nextBool()});
       // api.fetchUserConversations(userID);
 
-      if (state == false) {
+      if (state == false ||
+          res.data["Status"] == 400 ||
+          res.statusCode == 400) {
         throw Exception("Test exception");
       }
       // chatStorage.populateChats();

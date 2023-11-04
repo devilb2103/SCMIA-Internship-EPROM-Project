@@ -3,13 +3,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:scmia_eprom/constants.dart';
 
 class QuestionCard extends StatefulWidget {
+  final int questionIndex;
   final String question;
   final List<String> options;
+  final int? selectedOption;
   final Function(int)? onOptionSelected;
 
   QuestionCard({
+    required this.questionIndex,
     required this.question,
     required this.options,
+    this.selectedOption,
     this.onOptionSelected,
   });
 
@@ -19,6 +23,12 @@ class QuestionCard extends StatefulWidget {
 
 class _QuestionCardState extends State<QuestionCard> {
   int? selectedOption;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedOption = widget.selectedOption;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +49,7 @@ class _QuestionCardState extends State<QuestionCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.question,
+                "${widget.questionIndex + 1}. ${widget.question}",
                 style: GoogleFonts.inter(
                   fontSize: 18.0,
                   fontWeight: FontWeight.w600,
@@ -53,7 +63,8 @@ class _QuestionCardState extends State<QuestionCard> {
                     .entries
                     .map((entry) => RadioListTile<int>(
                           title: Text(
-                            "${widget.options.indexOf(entry.value) + 1} - ${entry.value}",
+                            // "${widget.options.indexOf(entry.value) + 1} - ${entry.value}",
+                            entry.value.trim(),
                             style: GoogleFonts.inter(
                               color: theme_dark,
                             ),

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:scmia_eprom/Cubits/Load%20Questionairre%20Cubit/load_questionnaire_cubit.dart';
 import 'package:scmia_eprom/Cubits/User%20Questionnaire%20Cubit/submit_user_questionnaire_cubit.dart';
 import 'package:scmia_eprom/Utils/error_snackbar.dart';
+import 'package:scmia_eprom/Utils/questionairreParser.dart';
 import 'package:scmia_eprom/Widgets/question_card.dart';
 import 'package:scmia_eprom/constants.dart';
 
@@ -32,7 +33,17 @@ class _PatientQuestionnaireScreenState
     super.dispose();
   }
 
-  List<int?> selectedOptions = [];
+  void submitForm(List<dynamic> selectedOptions) {
+    if (selectedOptions.contains(-1)) {
+      showSnackbarMessage(
+          context, false, "Please Select options to all questions");
+      return;
+    }
+    context
+        .read<SubmitUserQuestionnaireCubit>()
+        .submitQuestionnaire(selectedOptions);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -86,19 +97,32 @@ class _PatientQuestionnaireScreenState
       child: ListView.builder(
         // controller: chatScrollController,
         // physics: const BouncingScrollPhysics(),
-        itemCount: questions.length,
+        itemCount: questionairre.length,
         itemBuilder: (BuildContext context, int index) {
-          var question = questions.entries.elementAt(index);
+          var question = questionairre[index];
           // return questionItem(question.key, question.value, index);
           return Column(
             children: [
               index == 0 ? SizedBox(height: 21) : SizedBox(),
               QuestionCard(
-                  question: question.key,
-                  options: question.value,
-                  onOptionSelected: (value) =>
-                      print("question ${index} picked option ${value}")),
-              index == questions.length - 1 ? submitFormButton() : SizedBox()
+                  questionIndex: index,
+                  question: question["questions"].toString(),
+                  options: parseQuestions([
+                    question['option_a'],
+                    question['option_b'],
+                    question['option_c'],
+                    question['option_d'],
+                    question['option_e']
+                  ]),
+                  selectedOption: selectedOptions[index],
+                  onOptionSelected: (value) {
+                    setState(() {
+                      selectedOptions[index] = value;
+                    });
+                  }),
+              index == questionairre.length - 1
+                  ? submitFormButton()
+                  : SizedBox()
             ],
           );
         },
@@ -114,9 +138,7 @@ class _PatientQuestionnaireScreenState
             child: FloatingActionButton.extended(
               backgroundColor: theme_dark,
               onPressed: () {
-                context
-                    .read<SubmitUserQuestionnaireCubit>()
-                    .submitQuestionnaire();
+                submitForm(selectedOptions);
               },
               label: BlocConsumer<SubmitUserQuestionnaireCubit,
                   SubmitUserQuestionnaireState>(

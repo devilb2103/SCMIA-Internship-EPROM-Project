@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+late List<int?> selectedOptions;
+late List<dynamic> questionairre;
+
 extension ColorExtension on String {
   toColor() {
     var hexString = this;
