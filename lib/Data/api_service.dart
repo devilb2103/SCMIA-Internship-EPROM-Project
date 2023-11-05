@@ -20,7 +20,6 @@ class ApiService {
     // String userID,
     List<dynamic> selectedOptions,
   ) async {
-    print("lmaooo");
     var data = {"response": selectedOptions};
     final response = await _client.post("/save",
         options: Options(headers: {
